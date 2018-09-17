@@ -1,0 +1,15 @@
+[submodule "plugins/fileserverplugin"]
+	path = plugins/fileserverplugin
+	url = https://github.com/0xFEEDC0DE64/DbWebserver-fileserverplugin.git
+[submodule "plugins/helloworldplugin"]
+	path = plugins/helloworldplugin
+	url = https://github.com/0xFEEDC0DE64/DbWebserver-helloworldplugin.git
+[submodule "plugins/proxyplugin"]
+	path = plugins/proxyplugin
+	url = https://github.com/0xFEEDC0DE64/DbWebserver-proxyplugin.git
+[submodule "plugins/seriesplugin"]
+	path = plugins/seriesplugin
+	url = https://github.com/0xFEEDC0DE64/DbWebserver-seriesplugin.git
+[submodule "plugins/wifilampplugin"]
+	path = plugins/wifilampplugin
+	url = https://github.com/0xFEEDC0DE64/DbWebserver-wifilampplugin.git

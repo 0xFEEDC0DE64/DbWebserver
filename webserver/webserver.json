@@ -1,0 +1,92 @@
+{
+    "applications": {
+        "Fallback": {
+            "_pluginName": "fileserver",
+            "rootPath": "htdocs/__fallback"
+        },
+        "HelloWorld": {
+            "_pluginName": "helloworld"
+        },
+        "1000serien.com": {
+            "_pluginName": "series",
+            "mysql": {
+                "hostname": "localhost",
+                "username": "series",
+                "password": "_stripped_",
+                "database": "series"
+            }
+        },
+        "cdn.1000serien.com": {
+            "_pluginName": "fileserver",
+            "rootPath": "/komposthaufen/multimedia/Videos"
+        },
+        "brunner.ninja": {
+            "_pluginName": "fileserver",
+            "rootPath": "htdocs/brunner.ninja"
+        },
+        "telegram.brunner.ninja": {
+            "_pluginName": "fileserver",
+            "rootPath": "htdocs/telegram.brunner.ninja/dist"
+        },
+        "transmission.brunner.ninja": {
+            "_pluginName": "proxy",
+            "url": "http://127.0.0.1:9091/"
+        },
+        "findtheinvisiblegspot.com": {
+            "_pluginName": "fileserver",
+            "rootPath": "htdocs/findtheinvisiblegspot.com"
+        },
+        "flucky.xyz": {
+            "_pluginName": "fileserver",
+            "rootPath": "htdocs/flucky.xyz"
+        },
+        "mail.flucky.xyz": {
+            "_pluginName": "fileserver",
+            "rootPath": "/etc/webapps/roundcubemail"
+        },
+        "phpmyadmin.flucky.xyz": {
+            "_pluginName": "fileserver",
+            "rootPath": "/usr/share/webapps/phpMyAdmin"
+        },
+        "localhorst.xyz": {
+            "_pluginName": "fileserver",
+            "rootPath": "htdocs/localhorst.xyz"
+        },
+        "maik-mahlow.de": {
+            "_pluginName": "fileserver",
+            "rootPath": "htdocs/maik-mahlow.de"
+        },
+        "WifiLamp": {
+            "_pluginName": "wifilamp",
+            "controlHostAdress": "QHostAddress::Any",
+            "controlPort": 1234
+        }
+    },
+    "listeners": [{
+        "hostAddress": "QHostAddress::Any",
+        "port": 8080,
+        "vhosts": {
+            "*": "Fallback",
+            "1000serien.com": "1000serien.com",
+            "www.1000serien.com": "1000serien.com",
+            "cdn.1000serien.com": "cdn.1000serien.com",
+            "brunner.ninja": "brunner.ninja",
+            "www.brunner.ninja": "brunner.ninja",
+            "telegram.brunner.ninja": "telegram.brunner.ninja",
+            "transmission.brunner.ninja": "transmission.brunner.ninja",
+            "findtheinvisiblegspot.com": "findtheinvisiblegspot.com",
+            "www.findtheinvisiblegspot.com": "findtheinvisiblegspot.com",
+            "flucky.xyz": "flucky.xyz",
+            "www.flucky.xyz": "flucky.xyz",
+            "mail.flucky.xyz": "mail.flucky.xyz",
+            "phpmyadmin.flucky.xyz": "phpmyadmin.flucky.xyz",
+            "localhorst.xyz": "localhorst.xyz",
+            "www.localhorst.xyz": "localhorst.xyz",
+            "maik-mahlow.de": "maik-mahlow.de",
+            "www.maik-mahlow.de": "maik-mahlow.de",
+            "flucky-server": "HelloWorld",
+            "192.168.0.2": "HelloWorld",
+            "lampen": "WifiLamp"
+        }
+    }]
+}
