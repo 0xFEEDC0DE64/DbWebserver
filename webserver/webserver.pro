@@ -1,7 +1,7 @@
 QT += core network
 QT -= gui widgets
 
-DBLIBS += webserverlib
+DBLIBS += dbcore webserverlib
 
 PROJECT_ROOT = ../..
 

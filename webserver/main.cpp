@@ -9,7 +9,7 @@
 #include <stdexcept>
 #include <iterator>
 
-#include "utils.h"
+#include "utils/jsonutils.h"
 #include "webplugin.h"
 #include "weblistener.h"
 #include "webapplication.h"

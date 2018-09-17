@@ -7,7 +7,7 @@
 
 #include <stdexcept>
 
-#include "utils.h"
+#include "utils/netutils.h"
 #include "httpclientconnection.h"
 
 WebListener::WebListener(const QJsonObject &config, const QHash<QString, WebApplication*> &applications, QObject *parent) :
