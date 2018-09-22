@@ -5,9 +5,9 @@
 
 #include <QAbstractSocket>
 #include <QHostAddress>
+#include <QHash>
 
 class QJsonObject;
-template <class Key, class T> class QHash;
 class QTcpServer;
 
 class WebApplication;
@@ -29,7 +29,10 @@ private Q_SLOTS:
     void newConnection();
 
 private:
+    using HostsContainer = QHash<QString, WebApplication*>;
+
     QTcpServer *m_tcpServer;
     QHostAddress m_address;
     quint16 m_port;
+    HostsContainer m_hosts;
 };

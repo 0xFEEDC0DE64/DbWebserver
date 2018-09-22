@@ -12,14 +12,16 @@ SOURCES += \
     webapplication.cpp \
     webplugin.cpp \
     httpclientconnection.cpp \
-    httpcontainers.cpp
+    httprequest.cpp \
+    httpresponse.cpp
 
 HEADERS += webserverlib_global.h \
     weblistener.h \
     webapplication.h \
     webplugin.h \
     httpclientconnection.h \
-    httpcontainers.h
+    httprequest.h \
+    httpresponse.h
 
 FORMS +=
 

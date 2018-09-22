@@ -1,17 +1,20 @@
 #pragma once
 
+#include "webserverlib_global.h"
 #include <QObject>
+
 #include <QIODevice>
 
 #include <memory>
 
-#include "httpcontainers.h"
+#include "httpresponse.h"
+#include "httprequest.h"
 
 class QTcpSocket;
 
 class WebListener;
 
-class HttpClientConnection : public QObject
+class WEBSERVERLIB_EXPORT HttpClientConnection : public QObject
 {
     Q_OBJECT
 

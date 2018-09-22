@@ -1,18 +1,11 @@
 #pragma once
 
+#include "webserverlib_global.h"
+
 #include <QString>
 #include <QHash>
-#include <QByteArray>
 
-struct HttpRequest {
-    QString method;
-    QString path;
-    QString protocol;
-    QHash<QString, QString> headers;
-    QByteArray body;
-};
-
-struct HttpResponse {
+struct WEBSERVERLIB_EXPORT HttpResponse {
     enum class StatusCode {
         // 1xx Informational responses
         Continue = 100,                                                 // Continue
@@ -98,4 +91,39 @@ struct HttpResponse {
     QHash<QString, QString> headers;
 
     QString statusString() const;
+    static QString statusString(StatusCode statusCode);
+
+    static const QString HEADER_ACCEPTRANGES;
+    static const QString HEADER_AGE;
+    static const QString HEADER_ALLOW;
+    static const QString HEADER_CACHECONTROL;
+    static const QString HEADER_CONNECTION;
+    static const QString HEADER_CONTENTENCODING;
+    static const QString HEADER_CONTENTLANGUAGE;
+    static const QString HEADER_CONTENTLENGTH;
+    static const QString HEADER_CONTENTLOCATION;
+    static const QString HEADER_CONTENTMD5;
+    static const QString HEADER_CONTENTDISPOSITION;
+    static const QString HEADER_CONTENTRANGE;
+    static const QString HEADER_CONTENTSECURITYPOLICY;
+    static const QString HEADER_CONTENTTYPE;
+    static const QString HEADER_DATE;
+    static const QString HEADER_ETAG;
+    static const QString HEADER_EXPIRES;
+    static const QString HEADER_LASTMODIFIED;
+    static const QString HEADER_LINK;
+    static const QString HEADER_LOCATION;
+    static const QString HEADER_P3P;
+    static const QString HEADER_PRAGMA;
+    static const QString HEADER_PROXYAUTHENTICATE;
+    static const QString HEADER_REFRESH;
+    static const QString HEADER_RETRYAFTER;
+    static const QString HEADER_SERVER;
+    static const QString HEADER_SETCOOKIE;
+    static const QString HEADER_TRAILER;
+    static const QString HEADER_TRANSFERENCODING;
+    static const QString HEADER_VARY;
+    static const QString HEADER_VIA;
+    static const QString HEADER_WARNING;
+    static const QString HEADER_WWWAUTHENTICATE;
 };

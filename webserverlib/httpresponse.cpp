@@ -1,6 +1,11 @@
-#include "httpcontainers.h"
+#include "httpresponse.h"
 
 QString HttpResponse::statusString() const
+{
+    return statusString(statusCode);
+}
+
+QString HttpResponse::statusString(HttpResponse::StatusCode statusCode)
 {
     switch(statusCode) {
     case HttpResponse::StatusCode::Continue: return QStringLiteral("Continue");
@@ -73,3 +78,37 @@ QString HttpResponse::statusString() const
     case HttpResponse::StatusCode::NetworkAuthenticationRequired: return QStringLiteral("Network Authentication Required");
     }
 }
+
+const QString HttpResponse::HEADER_ACCEPTRANGES(QStringLiteral("Accept-Ranges"));
+const QString HttpResponse::HEADER_AGE(QStringLiteral("Age"));
+const QString HttpResponse::HEADER_ALLOW(QStringLiteral("Allow"));
+const QString HttpResponse::HEADER_CACHECONTROL(QStringLiteral("Cache-Control"));
+const QString HttpResponse::HEADER_CONNECTION(QStringLiteral("Connection"));
+const QString HttpResponse::HEADER_CONTENTENCODING(QStringLiteral("Content-Encoding"));
+const QString HttpResponse::HEADER_CONTENTLANGUAGE(QStringLiteral("Content-Language"));
+const QString HttpResponse::HEADER_CONTENTLENGTH(QStringLiteral("Content-Length"));
+const QString HttpResponse::HEADER_CONTENTLOCATION(QStringLiteral("Content-Location"));
+const QString HttpResponse::HEADER_CONTENTMD5(QStringLiteral("Content-MD5"));
+const QString HttpResponse::HEADER_CONTENTDISPOSITION(QStringLiteral("Content-Disposition"));
+const QString HttpResponse::HEADER_CONTENTRANGE(QStringLiteral("Content-Range"));
+const QString HttpResponse::HEADER_CONTENTSECURITYPOLICY(QStringLiteral("Content-Security-Policy"));
+const QString HttpResponse::HEADER_CONTENTTYPE(QStringLiteral("Content-Type"));
+const QString HttpResponse::HEADER_DATE(QStringLiteral("Date"));
+const QString HttpResponse::HEADER_ETAG(QStringLiteral("ETag"));
+const QString HttpResponse::HEADER_EXPIRES(QStringLiteral("Expires"));
+const QString HttpResponse::HEADER_LASTMODIFIED(QStringLiteral("Last-Modified"));
+const QString HttpResponse::HEADER_LINK(QStringLiteral("Link"));
+const QString HttpResponse::HEADER_LOCATION(QStringLiteral("Location"));
+const QString HttpResponse::HEADER_P3P(QStringLiteral("P3P"));
+const QString HttpResponse::HEADER_PRAGMA(QStringLiteral("Pragma"));
+const QString HttpResponse::HEADER_PROXYAUTHENTICATE(QStringLiteral("Proxy-Authenticate"));
+const QString HttpResponse::HEADER_REFRESH(QStringLiteral("Refresh"));
+const QString HttpResponse::HEADER_RETRYAFTER(QStringLiteral("Retry-After"));
+const QString HttpResponse::HEADER_SERVER(QStringLiteral("Server"));
+const QString HttpResponse::HEADER_SETCOOKIE(QStringLiteral("Set-Cookie"));
+const QString HttpResponse::HEADER_TRAILER(QStringLiteral("Trailer"));
+const QString HttpResponse::HEADER_TRANSFERENCODING(QStringLiteral("Transfer-Encoding"));
+const QString HttpResponse::HEADER_VARY(QStringLiteral("Vary"));
+const QString HttpResponse::HEADER_VIA(QStringLiteral("Via"));
+const QString HttpResponse::HEADER_WARNING(QStringLiteral("Warning"));
+const QString HttpResponse::HEADER_WWWAUTHENTICATE(QStringLiteral("WWW-Authenticate"));
