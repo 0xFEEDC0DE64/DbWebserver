@@ -8,11 +8,13 @@
 #include <stdexcept>
 
 #include "utils/netutils.h"
+
+#include "webserver.h"
 #include "httpclientconnection.h"
 #include "webapplication.h"
 
-WebListener::WebListener(const QJsonObject &config, const QHash<QString, WebApplication*> &applications, QObject *parent) :
-    QObject(parent)
+WebListener::WebListener(const QJsonObject &config, WebServer &webServer) :
+    QObject(&webServer), m_webServer(webServer)
 {
     if(!config.contains(QStringLiteral("hostAddress")))
         throw std::runtime_error("listener does not contain hostAddress");
@@ -21,7 +23,7 @@ WebListener::WebListener(const QJsonObject &config, const QHash<QString, WebAppl
     if(!hostAddressVal.isString())
         throw std::runtime_error("listener hostAddress is not a string");
 
-    m_address = parseHostAddress(hostAddressVal.toString());
+    m_hostAddress = parseHostAddress(hostAddressVal.toString());
 
     if(!config.contains(QStringLiteral("port")))
         throw std::runtime_error("listener does not contain port");
@@ -32,7 +34,7 @@ WebListener::WebListener(const QJsonObject &config, const QHash<QString, WebAppl
 
     m_port = portVal.toInt();
 
-    m_tcpServer = new QTcpServer(this);
+    m_server = new QTcpServer(this);
 
     if(!config.contains(QStringLiteral("vhosts")))
         throw std::runtime_error("listener does not contain vhosts");
@@ -47,14 +49,14 @@ WebListener::WebListener(const QJsonObject &config, const QHash<QString, WebAppl
         const auto applicationNameVal = iter.value();
         if(!applicationNameVal.isString())
             throw std::runtime_error(QString("listener %0:%1 vhost %2 is not a string")
-                                     .arg(m_address.toString()).arg(m_port).arg(iter.key()).toStdString());
+                                     .arg(m_hostAddress.toString()).arg(m_port).arg(iter.key()).toStdString());
 
         const auto applicationName = applicationNameVal.toString();
 
-        const auto applicationsIter = applications.find(applicationName);
-        if(applicationsIter == applications.constEnd())
+        const auto applicationsIter = m_webServer.applications().find(applicationName);
+        if(applicationsIter == m_webServer.applications().constEnd())
             throw std::runtime_error(QString("listener %0:%1 vhost %2 references unknown application %3")
-                                     .arg(m_address.toString()).arg(m_port).arg(iter.key(), applicationName).toStdString());
+                                     .arg(m_hostAddress.toString()).arg(m_port).arg(iter.key(), applicationName).toStdString());
 
         m_hosts.insert(iter.key(), *applicationsIter);
     }
@@ -62,13 +64,12 @@ WebListener::WebListener(const QJsonObject &config, const QHash<QString, WebAppl
 
 void WebListener::start()
 {
-    qDebug() << "starting listening" << m_address << m_port;
-    if(!m_tcpServer->listen(m_address, m_port))
+    if(!m_server->listen(m_hostAddress, m_port))
         throw std::runtime_error(QString("Could not start listening on %0:%1 because %2")
-                                 .arg(m_address.toString()).arg(m_port).arg(m_tcpServer->errorString()).toStdString());
+                                 .arg(m_hostAddress.toString()).arg(m_port).arg(m_server->errorString()).toStdString());
 
-    connect(m_tcpServer, &QTcpServer::acceptError, this, &WebListener::acceptError);
-    connect(m_tcpServer, &QTcpServer::newConnection, this, &WebListener::newConnection);
+    connect(m_server, &QTcpServer::acceptError, this, &WebListener::acceptError);
+    connect(m_server, &QTcpServer::newConnection, this, &WebListener::newConnection);
 }
 
 void WebListener::handleRequest(HttpClientConnection *connection, const HttpRequest &request)
@@ -121,9 +122,16 @@ void WebListener::acceptError(QAbstractSocket::SocketError socketError)
 
 void WebListener::newConnection()
 {
-    auto connection = m_tcpServer->nextPendingConnection();
-    if(!connection)
+    auto socket = m_server->nextPendingConnection();
+    if(!socket)
+    {
+        qWarning() << "null socket received";
         return;
+    }
 
-    new HttpClientConnection(*connection, *this);
+    auto client = new HttpClientConnection(*socket, *this);
+    m_clients.insert(client);
+    connect(client, &QObject::destroyed, this, [this, client](){
+        m_clients.remove(client);
+    });
 }

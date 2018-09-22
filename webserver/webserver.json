@@ -58,7 +58,7 @@
         },
         "WifiLamp": {
             "_pluginName": "wifilamp",
-            "controlHostAdress": "QHostAddress::Any",
+            "controlHostAddress": "QHostAddress::Any",
             "controlPort": 1234
         }
     },
@@ -67,26 +67,26 @@
         "port": 8080,
         "vhosts": {
             "*": "Fallback",
-            "1000serien.com": "1000serien.com",
-            "www.1000serien.com": "1000serien.com",
-            "cdn.1000serien.com": "cdn.1000serien.com",
-            "brunner.ninja": "brunner.ninja",
-            "www.brunner.ninja": "brunner.ninja",
-            "telegram.brunner.ninja": "telegram.brunner.ninja",
-            "transmission.brunner.ninja": "transmission.brunner.ninja",
-            "findtheinvisiblegspot.com": "findtheinvisiblegspot.com",
-            "www.findtheinvisiblegspot.com": "findtheinvisiblegspot.com",
-            "flucky.xyz": "flucky.xyz",
-            "www.flucky.xyz": "flucky.xyz",
-            "mail.flucky.xyz": "mail.flucky.xyz",
-            "phpmyadmin.flucky.xyz": "phpmyadmin.flucky.xyz",
-            "localhorst.xyz": "localhorst.xyz",
-            "www.localhorst.xyz": "localhorst.xyz",
-            "maik-mahlow.de": "maik-mahlow.de",
-            "www.maik-mahlow.de": "maik-mahlow.de",
-            "flucky-server": "HelloWorld",
-            "192.168.0.2": "HelloWorld",
-            "lampen": "WifiLamp"
+            "1000serien.com:8080": "1000serien.com",
+            "www.1000serien.com:8080": "1000serien.com",
+            "cdn.1000serien.com:8080": "cdn.1000serien.com",
+            "brunner.ninja:8080": "brunner.ninja",
+            "www.brunner.ninja:8080": "brunner.ninja",
+            "telegram.brunner.ninja:8080": "telegram.brunner.ninja",
+            "transmission.brunner.ninja:8080": "transmission.brunner.ninja",
+            "findtheinvisiblegspot.com:8080": "findtheinvisiblegspot.com",
+            "www.findtheinvisiblegspot.com:8080": "findtheinvisiblegspot.com",
+            "flucky.xyz:8080": "flucky.xyz",
+            "www.flucky.xyz:8080": "flucky.xyz",
+            "mail.flucky.xyz:8080": "mail.flucky.xyz",
+            "phpmyadmin.flucky.xyz:8080": "phpmyadmin.flucky.xyz",
+            "localhorst.xyz:8080": "localhorst.xyz",
+            "www.localhorst.xyz:8080": "localhorst.xyz",
+            "maik-mahlow.de:8080": "maik-mahlow.de",
+            "www.maik-mahlow.de:8080": "maik-mahlow.de",
+            "flucky-server:8080": "HelloWorld",
+            "192.168.0.2:8080": "HelloWorld",
+            "lampen:8080": "WifiLamp"
         }
     }]
 }

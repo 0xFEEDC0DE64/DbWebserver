@@ -13,7 +13,8 @@ SOURCES += \
     webplugin.cpp \
     httpclientconnection.cpp \
     httprequest.cpp \
-    httpresponse.cpp
+    httpresponse.cpp \
+    webserver.cpp
 
 HEADERS += webserverlib_global.h \
     weblistener.h \
@@ -21,7 +22,8 @@ HEADERS += webserverlib_global.h \
     webplugin.h \
     httpclientconnection.h \
     httprequest.h \
-    httpresponse.h
+    httpresponse.h \
+    webserver.h
 
 FORMS +=
 

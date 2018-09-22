@@ -6,10 +6,10 @@
 
 #include "weblistener.h"
 
-HttpClientConnection::HttpClientConnection(QTcpSocket &socket, WebListener &httpServer) :
-    QObject(&httpServer),
+HttpClientConnection::HttpClientConnection(QTcpSocket &socket, WebListener &webServer) :
+    QObject(&webServer),
     m_socket(socket),
-    m_webListener(httpServer),
+    m_webListener(webServer),
     m_state(RequestLine),
     m_bodyLength(-1)
 {
@@ -105,7 +105,11 @@ void HttpClientConnection::readyRead()
             case RequestLine:
             {
                 auto parts = line.split(' ');
-                Q_ASSERT(parts.count() == 3);
+                if(parts.count() != 3)
+                {
+                    m_socket.close();
+                    return;
+                }
 
                 m_request.method = parts.at(0);
                 m_request.path = parts.at(1);

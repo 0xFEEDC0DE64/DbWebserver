@@ -19,7 +19,7 @@ class WEBSERVERLIB_EXPORT HttpClientConnection : public QObject
     Q_OBJECT
 
 public:
-    explicit HttpClientConnection(QTcpSocket &socket, WebListener &WebListener);
+    explicit HttpClientConnection(QTcpSocket &socket, WebListener &webListener);
 
     void sendResponse(const HttpResponse &response);
     void sendResponse(HttpResponse response, const QByteArray &byteArray);
