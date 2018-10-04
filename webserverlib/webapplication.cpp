@@ -3,5 +3,4 @@
 WebApplication::WebApplication(QObject *parent) :
     QObject(parent)
 {
-
 }

@@ -12,6 +12,8 @@
 #include "webserver.h"
 #include "httpclientconnection.h"
 #include "webapplication.h"
+#include "httpnotfoundexception.h"
+#include "httpexception.h"
 
 WebListener::WebListener(const QJsonObject &config, WebServer &webServer) :
     QObject(&webServer), m_webServer(webServer)
@@ -82,37 +84,38 @@ void WebListener::handleRequest(HttpClientConnection *connection, const HttpRequ
             host = hostHeaderIter.value();
     }
 
-    if(host.isEmpty())
-    {
-        const auto iter = m_hosts.find(QStringLiteral("*"));
+    try {
+        if(host.isEmpty())
+        {
+            const auto iter = m_hosts.find(QStringLiteral("*"));
+            if(iter == m_hosts.constEnd())
+                throw HttpException(request, tr("Your request didn't contain a Host header and there is no fallback host configured!"));
+
+            iter.value()->handleRequest(connection, request);
+            return;
+        }
+
+        auto iter = m_hosts.find(host);
         if(iter == m_hosts.constEnd())
         {
-            HttpResponse response;
-            response.protocol = request.protocol;
-            response.statusCode = HttpResponse::StatusCode::BadRequest;
-            connection->sendResponse(response, tr("Your request didn't contain a Host header and there is no fallback host configured!"));
-            return;
+            iter = m_hosts.find(QStringLiteral("*"));
+            if(iter == m_hosts.constEnd())
+                throw HttpException(request, tr("Your requested Host \"%0\" is unknown and there is no fallback host configured!").arg(host));
         }
 
         iter.value()->handleRequest(connection, request);
-        return;
+    } catch (const HttpException &ex) {
+        HttpResponse response;
+        response.protocol = ex.httpRequest().protocol;
+        response.statusCode = HttpResponse::StatusCode::BadRequest;
+        connection->sendResponse(response, QByteArray(ex.what()));
+    // this could cause endless loop with exceptions in HttpClientConnection::sendResponse
+    //} catch (const std::exception &ex) {
+    //    HttpResponse response;
+    //    response.protocol = QStringLiteral("HTTP/1.1");
+    //    response.statusCode = HttpResponse::StatusCode::BadRequest;
+    //    connection->sendResponse(response, QByteArray(ex.what()));
     }
-
-    auto iter = m_hosts.find(host);
-    if(iter == m_hosts.constEnd())
-    {
-        iter = m_hosts.find(QStringLiteral("*"));
-        if(iter == m_hosts.constEnd())
-        {
-            HttpResponse response;
-            response.protocol = request.protocol;
-            response.statusCode = HttpResponse::StatusCode::BadRequest;
-            connection->sendResponse(response, tr("Your requested Host \"%0\" is unknown and there is no fallback host configured!"));
-            return;
-        }
-    }
-
-    iter.value()->handleRequest(connection, request);
 }
 
 void WebListener::acceptError(QAbstractSocket::SocketError socketError)

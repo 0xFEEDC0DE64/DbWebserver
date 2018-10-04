@@ -2,9 +2,15 @@
 
 #include <QTcpSocket>
 #include <QTextStream>
+#include <QFileDevice>
+#include <QFileInfo>
+#include <QMimeDatabase>
 #include <QRegularExpression>
+#include <QUrl>
 
 #include "weblistener.h"
+
+const int HttpClientConnection::m_bufferSize(1024*1024*4);
 
 HttpClientConnection::HttpClientConnection(QTcpSocket &socket, WebListener &webServer) :
     QObject(&webServer),
@@ -44,7 +50,7 @@ void HttpClientConnection::sendResponse(HttpResponse response, const QByteArray 
         return;
     }
 
-    response.headers.insert(QStringLiteral("Content-Length"), QString::number(byteArray.length()));
+    response.headers.insert(HttpResponse::HEADER_CONTENTLENGTH, QString::number(byteArray.length()));
     sendResponse(response);
     m_socket.write(byteArray);
     m_state = RequestLine;
@@ -73,9 +79,41 @@ void HttpClientConnection::sendResponse(HttpResponse response, std::unique_ptr<Q
     if(device->isSequential())
         throw std::runtime_error("sequental device not supported yet");
 
+    response.headers.insert(HttpResponse::HEADER_CONTENTLENGTH, QString::number(device->size()));
+
     m_sendingDeivce = std::move(device);
 
-    response.headers.insert(QStringLiteral("Content-Length"), QString::number(m_sendingDeivce->size()));
+    sendResponse(response);
+
+    connect(&m_socket, &QIODevice::bytesWritten, this, &HttpClientConnection::bytesWritten);
+    bytesWritten();
+
+    m_state = SendingResponse;
+}
+
+void HttpClientConnection::sendResponse(HttpResponse response, std::unique_ptr<QFileDevice> &&device)
+{
+    if(m_state != WaitingForResponse)
+        throw std::runtime_error("sending a response now is not allowed!");
+
+    if(!device->isReadable())
+        throw std::runtime_error("device is not readable");
+
+    if(device->isSequential())
+        throw std::runtime_error("sequental device not supported yet");
+
+    const QFileInfo fileInfo(device->fileName());
+
+    response.headers.insert(HttpResponse::HEADER_CONTENTLENGTH, QString::number(fileInfo.size() - device->pos()));
+
+    {
+        static const QMimeDatabase mimeDatabse;
+        const auto mimeType = mimeDatabse.mimeTypeForFile(fileInfo);
+        if(mimeType.isValid())
+            response.headers.insert(HttpResponse::HEADER_CONTENTTYPE, mimeType.name());
+    }
+
+    m_sendingDeivce = std::move(device);
 
     sendResponse(response);
 
@@ -104,16 +142,16 @@ void HttpClientConnection::readyRead()
             {
             case RequestLine:
             {
-                auto parts = line.split(' ');
+                auto parts = line.split(QLatin1Char(' '));
                 if(parts.count() != 3)
                 {
                     m_socket.close();
                     return;
                 }
 
-                m_request.method = parts.at(0);
-                m_request.path = parts.at(1);
-                m_request.protocol = parts.at(2);
+                m_request.method = parts.at(0).toUtf8();
+                m_request.path = QUrl::fromPercentEncoding(parts.at(1).toUtf8());
+                m_request.protocol = parts.at(2).toUtf8();
 
                 m_state = Headers;
                 continue;
@@ -148,7 +186,9 @@ void HttpClientConnection::readyRead()
                         clearRequest();
                     }
                 }
+                break;
             }
+            default: qt_noop();
             }
         }
         return;
@@ -169,13 +209,16 @@ void HttpClientConnection::readyRead()
             m_webListener.handleRequest(this, m_request);
             clearRequest();
         }
+
+        break;
     }
+    default: qt_noop();
     }
 }
 
 void HttpClientConnection::bytesWritten()
 {
-    if(m_socket.bytesToWrite() >= 1024*1024*4)
+    if(m_socket.bytesToWrite() >= m_bufferSize)
         return;
 
     if(m_socket.bytesToWrite() == 0 && m_sendingDeivce->bytesAvailable() == 0)
@@ -186,7 +229,7 @@ void HttpClientConnection::bytesWritten()
         return;
     }
 
-    auto buffer = m_sendingDeivce->read(1024*1024*4);
+    auto buffer = m_sendingDeivce->read(m_bufferSize);
     m_socket.write(buffer);
 }
 

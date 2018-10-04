@@ -14,7 +14,9 @@ SOURCES += \
     httpclientconnection.cpp \
     httprequest.cpp \
     httpresponse.cpp \
-    webserver.cpp
+    webserver.cpp \
+    httpexception.cpp \
+    httpnotfoundexception.cpp
 
 HEADERS += webserverlib_global.h \
     weblistener.h \
@@ -23,7 +25,9 @@ HEADERS += webserverlib_global.h \
     httpclientconnection.h \
     httprequest.h \
     httpresponse.h \
-    webserver.h
+    webserver.h \
+    httpexception.h \
+    httpnotfoundexception.h
 
 FORMS +=
 

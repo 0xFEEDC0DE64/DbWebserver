@@ -11,12 +11,15 @@
 #include "httprequest.h"
 
 class QTcpSocket;
+class QFileDevice;
 
 class WebListener;
 
 class WEBSERVERLIB_EXPORT HttpClientConnection : public QObject
 {
     Q_OBJECT
+
+    static const int m_bufferSize;
 
 public:
     explicit HttpClientConnection(QTcpSocket &socket, WebListener &webListener);
@@ -25,6 +28,7 @@ public:
     void sendResponse(HttpResponse response, const QByteArray &byteArray);
     void sendResponse(HttpResponse response, const QString &string);
     void sendResponse(HttpResponse response, std::unique_ptr<QIODevice> &&device);
+    void sendResponse(HttpResponse response, std::unique_ptr<QFileDevice> &&device);
 
 private Q_SLOTS:
     void readyRead();
