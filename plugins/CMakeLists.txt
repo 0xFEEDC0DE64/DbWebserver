@@ -1,4 +1,4 @@
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/plugins/webserver)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/plugins/webserver)
 
 add_subdirectory(fileserverplugin)
 add_subdirectory(helloworldplugin)
