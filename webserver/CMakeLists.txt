@@ -1,3 +1,5 @@
+find_package(Qt5Core CONFIG REQUIRED)
+
 set(HEADERS
 )
 
