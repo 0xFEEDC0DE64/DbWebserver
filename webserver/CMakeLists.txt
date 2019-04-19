@@ -13,7 +13,7 @@ set(DISTFILES
 
 add_executable(webserver ${HEADERS} ${SOURCES} ${DISTFILES})
 
-target_link_libraries(webserver Qt5::Core dbcorelib webserverlib)
+target_link_libraries(webserver stdc++ Qt5::Core dbcorelib webserverlib)
 
 #list(TRANSFORM DISTFILES
 #     PREPEND ${CMAKE_CURRENT_SOURCE_DIR}/)
